@@ -9,7 +9,7 @@ CYN	= \033[36m
 LGR	= \033[37m
 RST	= \033[0m
 
-NAME		:=	push_swap
+NAME		:=	pipex
 UNAME_S 	:= $(shell uname -s)
 
 SRC_D		:=	src/
@@ -18,8 +18,8 @@ LIB_D		:=	libft/
 INC			:=	libft/inc/	inc/
 
 LIB			:=	ft
-INC			:=	inc/ libft/
-SRC			:=	push_swap.c
+INC			:=	inc/ libft/inc/
+SRC			:=	main.c
 #FRAMEWORK	:=	OpenGL	AppKit
 
 SRC			:=	$(SRC:%=$(SRC_D)%)
@@ -56,7 +56,7 @@ $(NAME)	:	$(OBJ)
 #------------------------OBJ COMPILATION-----------------------------
 $(BUILD_D)%.o	:	$(SRC_D)%.c
 			$(DIR_DUP)
-			$(CC) $(CFLAGS) $(CPPFLAGS) -O2 -c $< -o $@
+			$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 			echo created $(@F)
 
 -include	${DEPS}
