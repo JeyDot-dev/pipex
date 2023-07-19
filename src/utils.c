@@ -1,31 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/13 11:37:27 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/07/19 10:57:13 by jsousa-a         ###   ########.fr       */
+/*   Created: 2023/07/18 13:47:03 by jsousa-a          #+#    #+#             */
+/*   Updated: 2023/07/18 13:53:38 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
-# include "libft.h"
-# include <fcntl.h>
-# include <unistd.h>
-# include <stdlib.h>
-# include <stdio.h>
-# include <sys/types.h>
-# include <sys/wait.h>
+#include "pipex.h"
 
-typedef struct	s_pipex
+void	error_exit(char *str)
 {
-	char	*path;
-}				t_pipex;
-
-void	error_exit(char *str);
-char	**get_path_list(char **env);
-char	*get_path(char **pathList, char *cmd);
-#endif
+	perror(str);
+	exit(EXIT_FAILURE);
+}
