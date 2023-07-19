@@ -19,7 +19,7 @@ INC			:=	libft/inc/	inc/
 
 LIB			:=	ft
 INC			:=	inc/ libft/inc/
-SRC			:=	main.c
+SRC			:=	main.c	path_functions.c	utils.c
 #FRAMEWORK	:=	OpenGL	AppKit
 
 SRC			:=	$(SRC:%=$(SRC_D)%)

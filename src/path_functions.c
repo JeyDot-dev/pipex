@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 13:34:27 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/07/19 10:41:27 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/07/19 22:54:20 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,10 @@ char	**get_path_list(char **env)
 	char	**pathList;
 	
 	i = 0;
-	j = 0;
-	while (env[i] && !strncmp(env[i], "PATH=", 5))
+	while (env[i] && strncmp(env[i], "PATH=", 5))
+	{
 		i++;
+	}
 	if (!env[i])
 		error_exit("get_path_list : Environment/PATH not found.");
 	else
@@ -35,20 +36,23 @@ char	*get_path(char **pathList, char *cmd)
 
 	i = 0;
 	cmdLen = ft_strlen(cmd);
-	while (path_list[i])
+	while (pathList[i])
 	{
-		path = ft_strlcat(pathList[i], cmd, ft_strlen(pathList[i]) + cmdLen);
+		path = ft_calloc(ft_strlen(pathList[i]) + cmdLen + 1, sizeof(*path));
+		ft_strlcat(path, pathList[i], ft_strlen(pathList[i]) + 1);
+		ft_strlcat(path, "/", ft_strlen(path) + 2);
+		ft_strlcat(path, cmd, ft_strlen(path) + cmdLen + 1);
 		if (!access(path, X_OK))
 			break ;
 		free(path);
 		i++;
 	}
-	i = sizeof(pathList);
-	while (--i >= 0)
-		free(pathList[i]);
-	free(pathList);
 	if (!access(path, X_OK))
+	{
+					ft_printf("ACCESS OK\nPath = %s\n", path);
 		return (path);
+		}
 	else
 		error_exit("get_path : CMD access impossible");
+	return (NULL);
 }
