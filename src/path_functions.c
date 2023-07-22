@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 13:34:27 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/07/19 22:54:20 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/07/22 09:57:45 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*get_path(char **pathList, char *cmd)
 	}
 	if (!access(path, X_OK))
 	{
-					ft_printf("ACCESS OK\nPath = %s\n", path);
+//					ft_printf("ACCESS OK\nPath = %s\n", path);
 		return (path);
 		}
 	else
