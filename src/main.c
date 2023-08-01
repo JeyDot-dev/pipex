@@ -6,78 +6,86 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 11:35:30 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/07/31 15:29:00 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/08/01 04:21:27 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "pipex.h"
-char	**clean_args(char *str, char *file)
+int		open_file(char *file_name, unsigned char mode)
 {
-	char	**new_av;
- 	(void) file;
-	new_av = ft_split(str, ' ');
-	return (new_av);
-}
-void	exec_last(t_pipex pipex, char *cmd)
-{
-	ft_printf("pid = %i\n", getpid());
-			char	buff[100];
-			ft_printf("read %i\n", read(pipex.fdin, buff, 50));
-		ft_printf("buff = %s\n", buff);
-		pipex.args = ft_split(cmd, ' ');
-		pipex.path = get_path(pipex.pathList, pipex.args[0]);
-		dup2(pipex.fdin, STDIN_FILENO);
-		close(pipex.fdin);
-		execve(pipex.path, pipex.args, pipex.envp);
-		exit(1);
+	int	fd;
 
+	if (mode == 'i')
+	{
+		fd = open(file_name, O_RDONLY);
+		if (fd < 0 || access(file_name, R_OK))
+			error_exit("open file_in");
+	}
+	else
+	{
+		fd = open(file_name, O_CREAT | O_WRONLY | O_TRUNC,
+		 S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+		if (fd < 0 || access(file_name, W_OK))
+			error_exit("open/create outfile");
+	}
+	return (fd);
+	
 }
 void	exec_child(t_pipex pipex, char *cmd)
 {
 	close(pipex.pipe[0]);
 	pipex.args = ft_split(cmd, ' ');
 	pipex.path = get_path(pipex.pathList, pipex.args[0]);
-	dup2(pipex.pipe[1], STDOUT_FILENO);
-	fprintf(stderr, "Pipex.path = %s\nPipex.args[0 - 2] = %s %s %s\n", pipex.path, pipex.args[0],
-	pipex.args[1], pipex.args[2]);
-	execve(pipex.path, pipex.args, pipex.envp);
-	exit(1);
+	if (dup2(pipex.pipe[1], STDOUT_FILENO) == -1)
+		error_exit("dup2() in exec_child");
+	if (execve(pipex.path, pipex.args, pipex.envp))
+		error_exit("execve in exec_child");
 }
-
-int	main(int ac, char **av, char **envp)
+void	process_cmds(t_pipex pipex, int ac, char **av)
 {
-	t_pipex	pipex;
-	int	i;
+	int		i;
 	pid_t	child;
-	pipex.envp = envp;
 
-	pipex.fdin = open(av[1], O_RDONLY);
-	pipex.outfile = open(av[ac - 1], O_CREAT | O_WRONLY | O_TRUNC,
-				S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
-	dup2(pipex.fdin, STDIN_FILENO);
-	dup2(pipex.outfile, STDOUT_FILENO);
 	i = 2;
-	if (ac < 5)
-		error_exit("Not enough arguments");
-	if (access(av[1], R_OK))
-		error_exit("Infile doesn't exist or no read-access.");
-	pipex.pathList = get_path_list(envp);
+
 	while (i < ac - 2)
 	{
-		pipe(pipex.pipe);
+		if (pipe(pipex.pipe))
+			error_exit("pipe in process_cmds");
 		child = fork();
+		if (child == -1)
+			error_exit("fork() in process_cmds");
 		if (child == 0)
 			exec_child(pipex, av[i]);
 		else
 		{
 			close(pipex.pipe[1]);
-			dup2(pipex.pipe[0], STDIN_FILENO);
+			if (dup2(pipex.pipe[0], STDIN_FILENO) == -1)
+				error_exit("dup2 in process_cmds");
 			waitpid(child, NULL, 0);
 		}
 		i++;
 	}
-	pipex.args = ft_split(av[i], ' ');
+}
+
+int	main(int ac, char **av, char **envp)
+{
+	t_pipex	pipex;
+
+	pipex.envp = envp;
+	pipex.fdin = open_file(av[1], 'i');
+	pipex.outfile = open_file(av[ac - 1], 'o');
+	if (dup2(pipex.fdin, STDIN_FILENO) == -1)
+		error_exit("dup2() in main()");
+	if (dup2(pipex.outfile, STDOUT_FILENO) == -1)
+		error_exit("dup2() in main()");
+	if (ac < 5)
+		error_exit("Not enough arguments");
+	pipex.pathList = get_path_list(envp);
+	process_cmds(pipex, ac, av);
+	pipex.args = ft_split(av[ac - 2], ' ');
 	pipex.path = get_path(pipex.pathList, pipex.args[0]);
-	execve(pipex.path, pipex.args, pipex.envp);
 	free_strtab(pipex.pathList);
-	return (0);
+	if (execve(pipex.path, pipex.args, pipex.envp))
+		error_exit("last execve in main");
+	return (1);
 }

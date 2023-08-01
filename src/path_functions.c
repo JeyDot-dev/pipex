@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 13:34:27 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/07/22 09:57:45 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/08/01 04:22:54 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,8 @@ char	*get_path(char **pathList, char *cmd)
 	}
 	if (!access(path, X_OK))
 	{
-//					ft_printf("ACCESS OK\nPath = %s\n", path);
 		return (path);
-		}
+	}
 	else
 		error_exit("get_path : CMD access impossible");
 	return (NULL);
