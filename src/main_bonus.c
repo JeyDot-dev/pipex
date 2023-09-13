@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 11:35:30 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/09/13 14:55:26 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/09/13 15:39:58 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "pipex.h"
@@ -64,7 +64,7 @@ void	process_cmds(t_pipex pipex, int ac, char **av)
 			if (dup2(pipex.pipe[0], STDIN_FILENO) == -1)
 				error_exit("dup2 in process_cmds");
 			waitpid(child, &status, 0);
-			if (WIFEXITED(status) == 1)
+			if (status == 256)
 				exit(EXIT_FAILURE);
 		}
 		i++;
@@ -75,8 +75,6 @@ int	main(int ac, char **av, char **envp)
 {
 	t_pipex	pipex;
 
-	if (ac != 5)
-		error_exit("Wrong number of arguments");
 	pipex.envp = envp;
 	pipex.fdin = open_file(av[1], 'i');
 	pipex.outfile = open_file(av[ac - 1], 'o');
@@ -84,7 +82,7 @@ int	main(int ac, char **av, char **envp)
 		error_exit("dup2() in main()");
 	if (dup2(pipex.outfile, STDOUT_FILENO) == -1)
 		error_exit("dup2() in main()");
-	if (ac < 5)
+	if (ac < 4)
 		error_exit("Not enough arguments");
 	pipex.path_list = get_path_list(envp);
 	process_cmds(pipex, ac, av);
