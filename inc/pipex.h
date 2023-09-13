@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 11:37:27 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/07/28 18:09:07 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/09/13 13:13:33 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct	s_pipex
 	int		input;
 }				t_pipex;
 
+void	perror_exit(char *str);
 void	error_exit(char *str);
 char	**get_path_list(char **env);
 char	*get_path(char **pathList, char *cmd);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 11:35:30 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/09/13 14:11:38 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/09/13 14:25:20 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "pipex.h"
@@ -74,8 +74,6 @@ int	main(int ac, char **av, char **envp)
 {
 	t_pipex	pipex;
 
-	if (ac != 5)
-		error_exit("Wrong number of arguments\n");
 	pipex.envp = envp;
 	pipex.fdin = open_file(av[1], 'i');
 	pipex.outfile = open_file(av[ac - 1], 'o');

@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 13:34:27 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/08/01 04:22:54 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/09/13 13:23:38 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,11 @@ char	**get_path_list(char **env)
 	char	**pathList;
 	
 	i = 0;
+	pathList = NULL;
 	while (env[i] && strncmp(env[i], "PATH=", 5))
-	{
 		i++;
-	}
 	if (!env[i])
-		error_exit("get_path_list : Environment/PATH not found.");
+		error_exit("PATH not found.");
 	else
 		pathList = ft_split(&env[i][5], ':');
 	return (pathList);
@@ -48,10 +47,8 @@ char	*get_path(char **pathList, char *cmd)
 		i++;
 	}
 	if (!access(path, X_OK))
-	{
 		return (path);
-	}
 	else
-		error_exit("get_path : CMD access impossible");
+		error_exit("CMD access impossible");
 	return (NULL);
 }

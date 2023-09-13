@@ -20,10 +20,13 @@ INC			:=	libft/inc/	inc/
 LIB			:=	ft
 INC			:=	inc/ libft/inc/
 SRC			:=	main.c	path_functions.c	utils.c
+SRC_BONUS	:=	main_bonus.c	path_functions.c	utils.c
 #FRAMEWORK	:=	OpenGL	AppKit
 
 SRC			:=	$(SRC:%=$(SRC_D)%)
+SRC_BONUS	:=	$(SRC_BONUS:%=$(SRC_D)%)
 OBJ 		:=	$(SRC:$(SRC_D)%.c=$(BUILD_D)%.o)
+OBJ_BONUS 	:=	$(SRC_BONUS:$(SRC_D)%.c=$(BUILD_D)%.o)
 DEPS        :=	$(OBJ:.o=.d)
 
 ifeq ($(UNAME_S),Linux)
@@ -53,11 +56,17 @@ $(NAME)	:	$(OBJ)
 			${CC} $(LDFLAGS) $(OBJ) $(LDLIBS) $(LDFMWK) -o $(NAME)
 			$(info MAKING $(NAME).....)
 			echo "\033[5;32m\t\tFinished compiling $(NAME) !!! $(CLR)"
+bonus : $(OBJ_BONUS)
+			$(MAKE) complib
+			${CC} $(LDFLAGS) $(OBJ_BONUS) $(LDLIBS) $(LDFMWK) -o $(NAME)
+			$(info MAKING $(NAME).....)
+			echo "\033[5;32m\t\tFinished compiling $(NAME) !!! $(CLR)"
 #------------------------OBJ COMPILATION-----------------------------
 $(BUILD_D)%.o	:	$(SRC_D)%.c
 			$(DIR_DUP)
 			$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 			echo created $(@F)
+
 
 -include	${DEPS}
 #----------------------------COMPLIB---------------------------------
@@ -70,7 +79,7 @@ ifeq ($(UNAME_S),Darwin)
 endif
 #----------------------------CLEAN-----------------------------------
 clean	:
-	$(RM) $(OBJ) $(DEPS)
+	$(RM) $(OBJ) $(OBJ_BONUS) $(DEPS)
 	$(MAKE) -C libft clean
 ifeq ($(UNAME_S),Darwin)
 else
