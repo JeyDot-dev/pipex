@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 11:37:27 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/09/13 13:13:33 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/09/13 14:30:22 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 
-typedef struct	s_pipex
+typedef struct s_pipex
 {
 	char	*path;
-	char	**pathList;
+	char	**path_list;
 	char	**args;
 	char	**envp;
 	int		fdin;
