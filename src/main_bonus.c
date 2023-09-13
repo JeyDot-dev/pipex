@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 11:35:30 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/09/13 14:39:36 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/09/13 14:55:26 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "pipex.h"
@@ -92,6 +92,6 @@ int	main(int ac, char **av, char **envp)
 	pipex.path = get_path(pipex.path_list, pipex.args[0]);
 	free_strtab(pipex.path_list);
 	if (execve(pipex.path, pipex.args, pipex.envp))
-		error_exit("last execve in main");
+		perror_exit("last execve in main");
 	return (1);
 }
