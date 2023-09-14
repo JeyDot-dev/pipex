@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 11:35:30 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/09/13 15:39:58 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/09/14 20:19:37 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "pipex.h"
@@ -45,7 +45,6 @@ void	exec_child(t_pipex pipex, char *cmd)
 void	process_cmds(t_pipex pipex, int ac, char **av)
 {
 	int		i;
-	int		status;
 	pid_t	child;
 
 	i = 2;
@@ -63,9 +62,7 @@ void	process_cmds(t_pipex pipex, int ac, char **av)
 			close(pipex.pipe[1]);
 			if (dup2(pipex.pipe[0], STDIN_FILENO) == -1)
 				error_exit("dup2 in process_cmds");
-			waitpid(child, &status, 0);
-			if (status == 256)
-				exit(EXIT_FAILURE);
+			waitpid(child, 0, 0);
 		}
 		i++;
 	}

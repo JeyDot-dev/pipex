@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 13:47:03 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/09/13 14:37:04 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/09/14 20:30:23 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "pipex.h"
@@ -31,5 +31,5 @@ void	error_exit(char *str)
 void	perror_exit(char *str)
 {
 	perror(str);
-	exit(EXIT_FAILURE);
+	exit(1);
 }

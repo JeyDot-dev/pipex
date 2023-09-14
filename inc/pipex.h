@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 11:37:27 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/09/13 14:30:22 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/09/14 20:07:57 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PIPEX_H
 # include "libft.h"
 # include <fcntl.h>
+# include <errno.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdio.h>
