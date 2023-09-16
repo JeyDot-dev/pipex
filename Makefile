@@ -27,7 +27,7 @@ SRC			:=	$(SRC:%=$(SRC_D)%)
 SRC_BONUS	:=	$(SRC_BONUS:%=$(SRC_D)%)
 OBJ 		:=	$(SRC:$(SRC_D)%.c=$(BUILD_D)%.o)
 OBJ_BONUS 	:=	$(SRC_BONUS:$(SRC_D)%.c=$(BUILD_D)%.o)
-DEPS        :=	$(OBJ:.o=.d)
+DEPS        :=	$(OBJ:.o=.d) $(OBJ_BONUS:.o=.d)
 
 ifeq ($(UNAME_S),Linux)
 INC		 	:=	libft/inc	inc
