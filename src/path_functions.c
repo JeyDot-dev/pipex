@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 13:34:27 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/09/13 14:36:33 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/09/21 15:31:52 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "pipex.h"
@@ -46,9 +46,11 @@ char	*get_path(char **path_list, char *cmd)
 		free(path);
 		i++;
 	}
+	if (!path_list[i])
+		error_cmd_not_found(cmd);
 	if (!access(path, X_OK))
 		return (path);
 	else
-		error_exit("CMD access impossible");
+		perror_exit(cmd);
 	return (NULL);
 }

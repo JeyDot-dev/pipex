@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: jsousa-a <jsousa-a@student.42lausan>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/16 14:16:29 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/09/16 14:17:20 by jsousa-a         ###   ########.fr       */
+/*   Created: 2023/09/21 15:33:34 by jsousa-a          #+#    #+#             */
+/*   Updated: 2023/09/21 15:35:08 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "pipex.h"
@@ -19,14 +19,14 @@ int	open_file(char *file_name, unsigned char mode)
 	{
 		fd = open(file_name, O_RDONLY);
 		if (fd < 0 || access(file_name, R_OK))
-			perror_exit("open file_in");
+			perror(file_name);
 	}
 	else
 	{
 		fd = open(file_name, O_CREAT | O_WRONLY | O_TRUNC,
 				S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
 		if (fd < 0 || access(file_name, W_OK))
-			perror_exit("open/create outfile");
+			perror(file_name);
 	}
 	return (fd);
 }
@@ -87,10 +87,10 @@ int	main(int ac, char **av, char **envp)
 	pipex.envp = envp;
 	pipex.fdin = open_file(av[1], 'i');
 	pipex.outfile = open_file(av[ac - 1], 'o');
-	if (dup2(pipex.fdin, STDIN_FILENO) == -1)
-		error_exit("dup2() in main()");
-	if (dup2(pipex.outfile, STDOUT_FILENO) == -1)
-		error_exit("dup2() in main()");
+	if (pipex.fdin >= 0 && dup2(pipex.fdin, STDIN_FILENO) == -1)
+		error_exit("dup2() file in()");
+	if (pipex.outfile >= 0 && dup2(pipex.outfile, STDOUT_FILENO) == -1)
+		error_exit("dup2() file out()");
 	pipex.path_list = get_path_list(envp);
 	process_cmds(pipex, ac, av);
 	pipex.args = ft_split(av[ac - 2], ' ');
