@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 13:34:27 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/09/23 13:58:35 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/09/23 14:27:25 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "pipex.h"
@@ -18,7 +18,7 @@ char	**get_path_list(char **env)
 
 	i = 0;
 	path_list = NULL;
-	while (env[i] && strncmp(env[i], "PATH=", 5))
+	while (env[i] && ft_strncmp(env[i], "PATH=", 5))
 		i++;
 	if (!env[i])
 		error_exit("PATH not found.");
