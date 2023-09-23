@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 11:35:30 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/09/23 12:53:11 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/09/23 14:17:45 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "pipex.h"
@@ -31,9 +31,11 @@ int	open_file(char *file_name, unsigned char mode)
 	return (fd);
 }
 
-void	exec_child(t_pipex pipex, char *cmd, int flag)
+void	exec_child(t_pipex pipex, char *cmd, int flag, int offset)
 {
 	close(pipex.pipe[0]);
+	if (offset > 0)
+		exit (1);
 	pipex.args = ft_split(cmd, ' ');
 	pipex.path = get_path(pipex.path_list, pipex.args[0]);
 	if (flag == 0)
@@ -52,14 +54,12 @@ void	exec_child(t_pipex pipex, char *cmd, int flag)
 		perror_exit("execve in exec_child");
 }
 
-void	process_cmds(t_pipex pipex, int ac, char **av, int offset)
+int	process_cmds(t_pipex pipex, int ac, char **av, int offset)
 {
 	int		i;
 	pid_t	child;
 
-	i = 2 + offset;
-	if (offset && !ft_strncmp(av[i], "cat", 4))
-		exit (1);
+	i = 2;
 	while (i < ac - 1)
 	{
 		if (pipe(pipex.pipe))
@@ -68,15 +68,17 @@ void	process_cmds(t_pipex pipex, int ac, char **av, int offset)
 		if (child == -1)
 			perror_exit("fork() in process_cmds");
 		if (child == 0 && i == ac - 2)
-			exec_child(pipex, av[i], 1);
+			exec_child(pipex, av[i], 1, offset);
 		else if (child == 0)
-			exec_child(pipex, av[i], 0);
+			exec_child(pipex, av[i], 0, offset);
 		close(pipex.pipe[1]);
 		if (dup2(pipex.pipe[0], STDIN_FILENO) == -1)
 			error_exit("dup2 in process_cmds");
 		i++;
+		offset = 0;
 	}
-	waitpid(-1, 0, 0);
+	waitpid(child, &i, 0);
+	return (WEXITSTATUS(i));
 }
 
 int	main(int ac, char **av, char **envp)
@@ -97,9 +99,7 @@ int	main(int ac, char **av, char **envp)
 	if (pipex.outfile >= 0 && dup2(pipex.outfile, STDOUT_FILENO) == -1)
 		error_exit("dup2() file out()");
 	pipex.path_list = get_path_list(envp);
-	process_cmds(pipex, ac, av, file_in_flag);
-	pipex.args = ft_split(av[ac - 2], ' ');
-	pipex.path = get_path(pipex.path_list, pipex.args[0]);
+	file_in_flag = process_cmds(pipex, ac, av, file_in_flag);
 	free_strtab(pipex.path_list);
-	return (0);
+	return (file_in_flag);
 }
